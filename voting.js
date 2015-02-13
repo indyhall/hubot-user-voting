@@ -14,6 +14,9 @@ var triggers =  {
 		/\+\s*\d*\s+@([^\s]+)/i,
 		/change\s+(?:mine|(?:my\s+)?vote)(?:\s+to)?\s+\@([^\s]+)/i
 	],
+	ditto: [
+		/(me (too|also)|same here)/i
+	],
 	tally: [
 		/tally/i
 	],
@@ -41,6 +44,9 @@ var responses = {
 		'Changing your vote to %s!',
 		'Fine. %s it is! You sure this time?'
 	],
+	ditto: [
+		'How original. %s it is...'
+	],
 	votingFor: [
 		'Got your vote for %s...',
 		'Hmm. OK. %s it is...',
@@ -57,6 +63,7 @@ var responses = {
 // Hubot Script
 module.exports = function(robot) {
 	var votes = {};
+	var lastVote = null;
 	var onNextConfirmation = null;
 
 	function reply(message, key) {
@@ -98,6 +105,7 @@ module.exports = function(robot) {
 
 				case 1:
 					username = users[0].name;
+					lastVote = username;
 
 					if (username == sender) {
 						reply(message, 'votingForSelf');
@@ -124,6 +132,10 @@ module.exports = function(robot) {
 					reply(message, 'clarifyVote', matchingNames.join(', '));
 					return;
 			}
+		},
+
+		ditto: function(message) {
+			// FIXME
 		},
 
 		tally: function(message) {
