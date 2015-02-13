@@ -65,25 +65,15 @@ module.exports = function(robot) {
 		return message.reply(response);
 	}
 
-	function normalize(message) {
-		if (!message.channel) {
-			message.channel = 'general';
-		}
-
-		return message;
-	}
-
 	var handler = {
 		start: function(message) {
-			message = normalize(message);
-
 			var startVoting = function(message, done) {
-				votes[message.channel] = {};
+				votes[message.message.room] = {};
 				reply(message, 'newVotingStarted');
 				done && done();
 			}
 
-			if (votes[message.channel]) {
+			if (votes[message.message.room]) {
 				onNextConfirmation = startVoting;
 				reply(message, 'confirmClearVotes');
 			} else {
@@ -92,8 +82,6 @@ module.exports = function(robot) {
 		},
 
 		vote: function(message) {
-			message = normalize(message);
-
 			var sender = message.message.user.name;
 			var username = message.match[1];
 
@@ -114,11 +102,11 @@ module.exports = function(robot) {
 						return;
 					}
 
-					if (!votes[message.channel]) {
-						votes[message.channel] = {};
+					if (!votes[message.message.room]) {
+						votes[message.message.room] = {};
 					}
 
-					var channelVotes = votes[message.channel];
+					var channelVotes = votes[message.message.room];
 					if (channelVotes[sender] && channelVotes[sender] !== username) {
 						reply(message, 'changingVoteTo', '@' + username);
 					} else {
@@ -137,9 +125,7 @@ module.exports = function(robot) {
 		},
 
 		tally: function(message) {
-			message = normalize(message);
-
-			var channelVotes = votes[message.channel];
+			var channelVotes = votes[message.message.room];
 			var tally = {};
 
 			if (!channelVotes) {
@@ -171,14 +157,14 @@ module.exports = function(robot) {
 
 			// Build string
 			var winner;
-			var results = 'Current results for #' + message.channel + ':\n\n';
+			var results = 'Current results for #' + message.message.room + ':\n\n';
 			orderedTally.forEach(function(username) {
 				winner = username;
 				var userVotes = tally[username];
 				var count = userVotes.length;
 				results += '   - @' + username + ': ';
 				results += count + ' vote' + (1 === count ? '' : 's');
-				results += ' (voters: ' + userVotes.join(', ') + ')\n';
+				results += ' (voters: @' + userVotes.join(', @') + ')\n';
 			});
 
 			results += '\nWinner: @' + winner;
@@ -187,8 +173,6 @@ module.exports = function(robot) {
 		},
 
 		confirm: function(message) {
-			message = normalize(message);
-			
 			if (onNextConfirmation) {
 				return onNextConfirmation(message, function() {
 					onNextConfirmation = null;
