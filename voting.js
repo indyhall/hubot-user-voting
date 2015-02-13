@@ -86,8 +86,8 @@ module.exports = function(robot) {
 			var username = message.match[1];
 
 			// FIXME
-			// var users = robot.brain.usersForFuzzyName(username);
-			var users = [{ name: username }];
+			var users = robot.brain.usersForFuzzyName(username);
+			// var users = [{ name: username }];
 
 			switch (users.length) {
 				case 0:
