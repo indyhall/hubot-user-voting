@@ -1,6 +1,6 @@
 {
   "name": "hubot-user-voting",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Hubot script that allows you to vote on users (built for Slack)",
   "main": "voting.js",
   "scripts": {
