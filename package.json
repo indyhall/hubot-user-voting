@@ -1,0 +1,19 @@
+{
+  "name": "hubot-user-voting",
+  "version": "1.0.0",
+  "description": "Hubot script that allows you to vote on users (built for Slack)",
+  "main": "voting.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/indyhall/hubot-user-voting.git"
+  },
+  "author": "Chris Morrell",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/indyhall/hubot-user-voting/issues"
+  },
+  "homepage": "https://github.com/indyhall/hubot-user-voting"
+}
