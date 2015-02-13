@@ -1,5 +1,7 @@
 'use strict';
 
+var util = require('util');
+
 var VoteBot = {
 	phrases: {
 		start: [
@@ -17,10 +19,45 @@ var VoteBot = {
 			/(yes|yep|sure|ok)/i
 		]
 	},
+	responses: {
+		newVotingStarted: [
+			'OK, boss.',
+			'Got it. New voting started!'
+		],
+		confirmClearVotes: [
+			'Are you sure you want to clear all past votes and start a new poll?'
+		],
+		cannotFindUser: [
+			'I can\'t find anyone named %s',
+			'%s? No one \'round these parts by that name...',
+		],
+		votingForSelf: [
+			'Bad form, dude.'
+		],
+		changingVoteTo: [
+			'Changing your vote to %s!',
+			'Fine. %s it is! You sure this time?'
+		],
+		votingFor: [
+			'Got your vote for %s...',
+			'Hmm. OK. %s it is...'
+		],
+		clarifyVote: [
+			'Could you be a little clearer?  One of: %s'
+		]
+	},
 
 	_votes: {},
 	_onConfirm: null,
 	_bot: null,
+
+	_reply: function(message, key) {
+		var args = Array.prototype.slice.call(arguments, 2);
+		var format = message.random(VoteBot.responses[key]);
+		args.unshift(format);
+		var response = util.format.apply(this, args);
+		message.reply(response);
+	},
 
 	// Bootstrap VoteBot
 	bootstrap: function(robot) {
@@ -35,13 +72,13 @@ var VoteBot = {
 	start: function(message) {
 		var startVoting = function(message, done) {
 			VoteBot._votes = {};
-			message.reply('Got it. New voting started!');
+			VoteBot._reply(message, 'newVotingStarted');
 			done && done();
 		}
 
 		if (Object.keys(VoteBot._votes).length) {
 			VoteBot._onConfirm = startVoting;
-			message.reply('Are you sure you want to clear all past votes and start a new poll?');
+			VoteBot._reply(message, 'confirmClearVotes');
 		} else {
 			startVoting(message);
 		}
@@ -56,22 +93,22 @@ var VoteBot = {
 		var users = robot.brain.usersForFuzzyName(username);
 		switch (users.length) {
 			case 0:
-				message.reply("I can't find anyone named @" + username);
+				VoteBot._reply(message, 'cannotFindUser', '@' + username);
 				return;
 
 			case 1:
 				username = users[0].name;
 
 				if (username == sender) {
-					message.reply("Bad form, dude.");
+					VoteBot._reply(message, 'votingForSelf');
 					return;
 				}
 
 				var votes = VoteBot._votes;
 				if (votes[sender] && votes[sender] !== username) {
-					message.reply('Changing your vote to @' + username);
+					VoteBot._reply(message, 'changingVoteTo', '@' + username);
 				} else {
-					message.reply('Got your vote for @' + username);
+					VoteBot._reply(message, 'votingFor', '@' + username);
 				}
 				votes[sender] = username;
 				return;
@@ -80,7 +117,7 @@ var VoteBot = {
 				var matchingNames = users.map(function(user) {
 					return '@' + user.name;
 				});
-				message.reply('Could you be a little clearer?  One of: ' + matchingNames.join(', '));
+				VoteBot._reply(message, 'clarifyVote', matchingNames.join(', '));
 				return;
 		}
 	},
