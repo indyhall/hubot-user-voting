@@ -11,7 +11,8 @@ var triggers =  {
 	vote: [
 		/(?:i\s+)?vote(?:\s+for)?\s+\@([^\s]+)/i,
 		/\@([^\s:]+):?\s*\+\s*\d*/i,
-		/\+\s*\d*\s+@([^\s]+)/i
+		/\+\s*\d*\s+@([^\s]+)/i,
+		/change\s+(?:mine|(?:my\s+)?vote)(?:\s+to)?\s+\@([^\s]+)/i
 	],
 	tally: [
 		/tally/i
@@ -42,7 +43,8 @@ var responses = {
 	],
 	votingFor: [
 		'Got your vote for %s...',
-		'Hmm. OK. %s it is...'
+		'Hmm. OK. %s it is...',
+		'Hrm. Was about to post a calming manatee meme, but I guess I\'ll log your vote for %s instead.'
 	],
 	clarifyVote: [
 		'Could you be a little clearer?  One of: %s'
