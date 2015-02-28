@@ -93,10 +93,7 @@ module.exports = function(robot) {
 		vote: function(message) {
 			var sender = message.message.user.name;
 			var username = message.match[1];
-
-			// FIXME
 			var users = robot.brain.usersForFuzzyName(username);
-			// var users = [{ name: username }];
 
 			switch (users.length) {
 				case 0:
