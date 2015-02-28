@@ -184,18 +184,44 @@ module.exports = function(robot) {
 			});
 
 			// Build string
-			var winner;
+			var previousCount = 0;
+			var winners = [];
 			var results = 'Current results for #' + message.message.room + ':\n\n';
 			orderedTally.forEach(function(username) {
-				winner = username;
 				var userVotes = tally[username];
 				var count = userVotes.length;
-				results += '   - @' + username + ': ';
+
+				if (count !== previousCount) {
+					winners = [];
+				}
+				
+				winners.push(username);
+				previousCount = count;
+
+				// Add to results string
+				results += '   • @' + username + ': ';
 				results += count + ' vote' + (1 === count ? '' : 's');
 				results += ' (voters: @' + userVotes.join(', @') + ')\n';
 			});
 
-			results += '\nWinner: @' + winner;
+			// Winner
+			switch (winners.length) {
+				case 1:
+					results += '\nWinner: @' + winners[0];
+					break;
+
+				case 2:
+					results += '\nIt\'s a tie! @' + winners.join(' and @');
+					break;
+
+				case 3:
+					results += '\nÉgalité de trois! @' + winners.join(' + @');
+					break;
+
+				default:
+					results += '\nY\'all can\'t make up your damn minds.';
+					break;
+			}
 
 			message.send(results);
 		},
