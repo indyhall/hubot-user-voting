@@ -33,11 +33,14 @@ module.exports = function(robot) {
 	var lastVote = null;
 	var onNextConfirmation = null;
 
-	function reply(message, key) {
+	function reply(message, key, prefix) {
 		var args = Array.prototype.slice.call(arguments, 2);
 		var format = message.random(responses[key]);
 		args.unshift(format);
 		var response = util.format.apply(this, args);
+		if (prefix) {
+			response = '[' + prefix + '] ' + response;
+		}
 		return message.reply(response);
 	}
 
@@ -76,6 +79,7 @@ module.exports = function(robot) {
 					username = users[0].name;
 					lastVote = username;
 
+					// Can't vote for self
 					if (username == sender) {
 						reply(message, 'votingForSelf');
 						return;
@@ -86,12 +90,27 @@ module.exports = function(robot) {
 					}
 
 					var channelVotes = votes[message.message.room];
+
+					// Are they changing their vote?
+					var responseKey = 'votingFor';
 					if (channelVotes[sender] && channelVotes[sender] !== username) {
-						reply(message, 'changingVoteTo', '@' + username);
-					} else {
-						reply(message, 'votingFor', '@' + username);
+						responseKey = 'changingVoteTo';
 					}
+
+					// Save vote
 					channelVotes[sender] = username;
+
+					// Get new count
+					var votesForUser = 0;
+					Object.keys(channelVotes).forEach(function(key) {
+						if (channelVotes[key] == username) {
+							votesForUser++;
+						}
+					});
+					
+					// Reply
+					var prefix = '@' + username + ': ' + votesForUser + ' vote' + (1 == votesForUser ? '' : 's');
+					reply(message, responseKey, '@' + username, prefix);
 					return;
 
 				default:
