@@ -57,10 +57,15 @@ module.exports = function(robot) {
 			}
 		},
 
-		vote: function(message) {
+		vote: function(message, heard) {
 			var sender = message.message.user.name;
 			var username = message.match[1];
 			var users = robot.brain.usersForFuzzyName(username);
+
+			// Skip non-matching responses if not directly addressed
+			if (true === heard && (1 !== users.length || users[0].name !== username)) {
+				return;
+			}
 
 			switch (users.length) {
 				case 0:
@@ -190,5 +195,10 @@ module.exports = function(robot) {
 		triggers[key].forEach(function(trigger) {
 			robot.respond(trigger, handler[key]);
 		});
+	});
+
+	// Add special case to overhear votes w/o directly being addressed
+	robot.hear(triggers.vote, function(message) {
+		handler.vote(message, true);
 	});
 };
