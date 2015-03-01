@@ -166,11 +166,11 @@ module.exports = function(robot) {
 					break;
 
 				case 2:
-					results += '\nIt\'s a tie! @' + winners.join(' and @');
+					results += '\nIt\'s a tie between @' + winners.join(' and @') + '!';
 					break;
 
 				case 3:
-					results += '\nÉgalité de trois! @' + winners.join(' + @');
+					results += '\nÉgalité de trois: @' + winners.join(' + @') + '!';
 					break;
 
 				default:
