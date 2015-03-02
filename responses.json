@@ -10,7 +10,7 @@
 	],
 	"cannotFindUser": [
 		"I can't find anyone named %s",
-		"%s? No one 'round these parts by that name...",
+		"%s? No one 'round these parts by that name..."
 	],
 	"votingForSelf": [
 		"Bad form, dude.",
