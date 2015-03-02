@@ -62,6 +62,13 @@ module.exports = function(robot) {
 		},
 
 		vote: function(message, heard) {
+
+			// Don't allow multiple responses
+			if (true === message.voteHandled) {
+				return;
+			}
+			message.voteHandled = true;
+
 			var sender = message.message.user.name;
 			var username = message.match[1];
 			var users = robot.brain.usersForFuzzyName(username);
