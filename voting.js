@@ -217,7 +217,9 @@ module.exports = function(robot) {
 	});
 
 	// Add special case to overhear votes w/o directly being addressed
-	robot.hear(triggers.vote, function(message) {
-		handler.vote(message, true);
+	triggers.vote.forEach(function(trigger) {
+		robot.hear(trigger, function(message) {
+			handler.vote(message, true);
+		});
 	});
 };
