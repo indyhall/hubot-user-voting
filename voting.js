@@ -33,14 +33,15 @@ module.exports = function(robot) {
 	var lastVote = null;
 	var onNextConfirmation = null;
 
-	function reply(message, key, prefix) {
-		var args = Array.prototype.slice.call(arguments, 2);
-		var format = message.random(responses[key]);
-		args.unshift(format);
-		var response = util.format.apply(this, args);
-		if (prefix) {
-			response = '[' + prefix + '] ' + response;
+	function reply(message, key, data) {
+		var response = message.random(responses[key]);
+		if (data) {
+			Object.keys(data).forEach(function(key) {
+				// response = response.replace(':' + key, data[key]);
+				response = response.split(':' + key).join(data[key]); // Replace all
+			});
 		}
+		
 		return message.reply(response);
 	}
 
@@ -72,7 +73,7 @@ module.exports = function(robot) {
 
 			switch (users.length) {
 				case 0:
-					reply(message, 'cannotFindUser', '@' + username);
+					reply(message, 'cannotFindUser', { name: '@' + username });
 					return;
 
 				case 1:
@@ -109,15 +110,19 @@ module.exports = function(robot) {
 					});
 					
 					// Reply
-					var prefix = '@' + username + ': ' + votesForUser + ' vote' + (1 == votesForUser ? '' : 's');
-					reply(message, responseKey, '@' + username, prefix);
+					var data = {
+						name: '@' + username,
+						voteCount: votesForUser,
+						pluralizedVotes: 'vote' + (1 == votesForUser ? '' : 's')
+					};
+					reply(message, responseKey, data);
 					return;
 
 				default:
 					var matchingNames = users.map(function(user) {
 						return '@' + user.name;
 					});
-					reply(message, 'clarifyVote', matchingNames.join(', '));
+					reply(message, 'clarifyVote', { names: matchingNames.join(', ') });
 					return;
 			}
 		},
