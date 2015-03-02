@@ -25,7 +25,7 @@ var triggers =  {
 	]
 };
 
-var responses = require('responses.json');
+var responses = require(__dirname + '/responses.json');
 
 // Hubot Script
 module.exports = function(robot) {
