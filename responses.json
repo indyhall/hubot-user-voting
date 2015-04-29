@@ -1,5 +1,6 @@
 {
 	"newVotingStarted": [
+		"Voting has been started.",
 		"OK, boss.",
 		"Got it. New voting started!",
 		"Fine. I was going to watch Michael Jordan clips on YouTube, but I suppose it can wait...",
@@ -13,6 +14,7 @@
 		":name? No one 'round these parts by that name..."
 	],
 	"votingForSelf": [
+		"Sorry, but you cannot vote for yourself.",
 		"Bad form, dude.",
 		"Got it. REMOVING one vote for you!",
 		"Nope.",
@@ -20,16 +22,17 @@
 		"The president can vote for him or herself. You, my friend, cannot. One more reason you are not the president. One of many. (Don't think through that logic too much.)"
 	],
 	"changingVoteTo": [
-		"Changing your vote to :name!",
+		"Your vote has been changed to :name.",
 		"Fine. :name it is! You sure this time?",
 		"OK, John Kerry... Now your vote's for :name!",
 		"Good. :name. Got it. I forgot to write down your vote last time. This time I'm paying close attent... OOH YOUTUBE!"
 	],
 	"ditto": [
+		"Got your vote for :name."
 		"How original. :name it is..."
 	],
 	"votingFor": [
-		"Got your vote for :name... They now have :voteCount :pluralizedVotes!",
+		"Got your vote for :name... They now have :voteCount :pluralizedVotes.",
 		"Hmm. OK. :name it is... They now have :voteCount :pluralizedVotes, believe it or not!",
 		"Hrm. Was about to post a calming manatee meme, but I guess I'll log your vote for :name instead. Manatees: 0. :name: :voteCount.",
 		":name? Really? I suppose there's no accounting for taste... Now :name is up to a whopping :voteCount :pluralizedVotes!",

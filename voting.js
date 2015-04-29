@@ -34,7 +34,16 @@ module.exports = function(robot) {
 	var onNextConfirmation = null;
 
 	function reply(message, key, data) {
-		var response = message.random(responses[key]);
+		var response;
+		if (0 === Math.floor(Math.random() * 10)) {
+			// 10% chance of a random response
+			response = message.random(responses[key]);
+		} else {
+			// 90% chance of the first response in the list
+			response = responses[key][0];
+		}
+
+		
 		if (data) {
 			Object.keys(data).forEach(function(key) {
 				// response = response.replace(':' + key, data[key]);
